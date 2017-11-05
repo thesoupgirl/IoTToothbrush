@@ -48,20 +48,21 @@ press() {
 
 const styles = StyleSheet.create({
  	scroll: {
-	    backgroundColor: '#E1D7D8',
+ 		paddingTop: 80,
+	    backgroundColor: '#FFFFFF',
 	    padding: 30,
 	    flexDirection: 'column'
     },
     label: {
 	    color: '#0d8898',
-	    fontSize: 20
+	    fontSize: 15
     },
     alignRight: {
     	alignSelf: 'flex-end'
 	},
 	textInput: {
-	    height: 40,
-	    fontSize: 10,
+	    height: 30,
+	    fontSize: 20,
 	    borderBottomWidth: 2,
 	    borderColor: '#909090',
 	},
@@ -74,10 +75,10 @@ const styles = StyleSheet.create({
 	    color: '#595856'
 	},
 	primaryButton: {
-	    backgroundColor: '#34A853'
+	    backgroundColor: '#8DDBE0'
 	},
 	footer: {
-	   marginTop: 100
+	   marginTop: 60
 	}
 });
 
