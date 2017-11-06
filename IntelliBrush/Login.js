@@ -3,8 +3,10 @@ import Container from './components/Container';
 import Button from './components/Button';
 import Label from './components/Label';
 import Overview from './Overview';
- 
+var md5 = require('md5');
+
 import {
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -51,7 +53,7 @@ export default class Login extends Component {
     		</Container>
     		<View style={styles.footer}>
 	    		<Container>
-	        		<Button label="Sign In" styles={{button: styles.primaryButton, label: styles.buttonWhiteText}}  onPress={() => navigate('Overview')} />
+	        		<Button label="Sign In" styles={{button: styles.primaryButton, label: styles.buttonWhiteText}}  onPress={this.pressSignIn.bind(this)} />
 	    		</Container>
     			<Container>
 			        <Button label="CANCEL" styles={{label: styles.buttonBlackText}} onPress={this.clearText} />
@@ -62,15 +64,29 @@ export default class Login extends Component {
   }
 
 pressSignIn() {
-	//const { navigate } = this.props.navigation;
-	//navigate('Overview');
+	console.log("killme");
+	const { navigate } = this.props.navigation;
+	console.log(this.state.username);
+	if(this.state.username != '' && this.state.password != '') {
+		navigate('Overview');
+	}
+	else if(this.state.username == '' && this.state.password == '') {
+		Alert.alert('No username or password...thats awks')
+	}
+	else if(this.state.password == '') {
+		Alert.alert('No password...thats awks')
+	}
+	else if(this.state.username == '') {
+		Alert.alert('No username...thats awks')
+	}
+	else {
+		Alert.alert('Something went wrong :/')
+	}
+
 	console.log("m");
 
 }
-pressCancel() {
-  console.log("r");
-  this.state.username = "";
-}
+
 press() {
 
 }
