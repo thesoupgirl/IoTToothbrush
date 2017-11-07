@@ -12,11 +12,13 @@ export default class App extends React.Component {
     );
   }
 }
-
+navigationOptions = { title: 'Welcome', header: null };
 export const Nav = StackNavigator({
-  Login: { screen: Login },
-  Overview: { screen: Overview },
-});
+  Login: { screen: Login, navigationOptions: { header: null }},
+  Overview: { screen: Overview, navigationOptions: { header: null }  }},
+  navigationOptions: { header:{ visible:false }},
+  { headerMode: 'none' },
+);
 
 AppRegistry.registerComponent('App', () => Nav);
 

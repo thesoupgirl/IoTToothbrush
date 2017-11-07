@@ -39,6 +39,40 @@ export default class Overview extends Component {
 			        	</Text>
 			        </View>
 			    </View>
+			    <View style={{flex: 2, flexDirection: 'row'}}>
+			    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+			        	<Text style={ styles.tableBlackText }>
+			        		Nov 17 2017
+			        	</Text>
+			        </View>
+			        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+			        	<Text style={ styles.tableBlackText }>
+			        		2 min 32 sec
+			        	</Text>
+			        </View>
+			        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+			        	<Text style={ styles.tableBlackText }>
+			        		B
+			        	</Text>
+			        </View>
+			    </View>
+			    <View style={{flex: 2, flexDirection: 'row'}}>
+			    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+			        	<Text style={ styles.tableBlackText }>
+			        		Nov 16 2017
+			        	</Text>
+			        </View>
+			        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+			        	<Text style={ styles.tableBlackText }>
+			        		1 min 19 sec
+			        	</Text>
+			        </View>
+			        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+			        	<Text style={ styles.tableBlackText }>
+			        		C-
+			        	</Text>
+			        </View>
+			    </View>
 			</ScrollView>
     );
   }
@@ -50,9 +84,9 @@ const styles = StyleSheet.create({
 	},
 	primaryButton: {
 		marginRight: 0,
-		marginLeft: 90,
-		paddingLeft: 50,
-		paddingRight: 50,
+		marginLeft: 160,
+		padding: 10,
+		width: 100,
 	    backgroundColor: '#8DDBE0'
 	},
 	buttonWhiteText: {

@@ -3,11 +3,13 @@ import Container from './components/Container';
 import Button from './components/Button';
 import Label from './components/Label';
 import Overview from './Overview';
+import { StackNavigator } from 'react-navigation';
 var md5 = require('md5');
 
 import {
   Alert,
   StyleSheet,
+  Image,
   Text,
   View,
   TextInput,
@@ -39,6 +41,9 @@ export default class Login extends Component {
   	const { navigate } = this.props.navigation;
     return (
         <ScrollView style={styles.scroll}>
+        <View>
+    		<Image style={styles.stretch, styles.imagePlace} source={require('./16ec5560-c56e-48ee-831b-2e8fe4080a75.png')} />
+    	</View>
         	<Container>
     			<Label text="Username or Email" />
     			<TextInput ref={component => this._textInput = component} style={styles.textInput} onChangeText={(text) => this.setState({username:text})}/>
@@ -94,7 +99,7 @@ press() {
 
 const styles = StyleSheet.create({
  	scroll: {
- 		paddingTop: 30,
+ 		paddingTop: -80,
 	    backgroundColor: '#FFFFFF',
 	    padding: 30,
 	    flexDirection: 'column'
@@ -116,6 +121,9 @@ const styles = StyleSheet.create({
 	    fontSize: 20,
 	    color: '#FFF',
 	},
+	imagePlace: {
+		marginTop: -30
+	},
 	buttonBlackText: {
 	    fontSize: 20,
 	    color: '#595856'
@@ -124,7 +132,7 @@ const styles = StyleSheet.create({
 	    backgroundColor: '#8DDBE0'
 	},
 	footer: {
-	   marginTop: 60
+	   marginTop: -5
 	}
 });
 
