@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
 	    color: '#FFF',
 	},
 	imagePlace: {
+    	alignSelf: 'center',
 		marginTop: -30
 	},
 	buttonBlackText: {
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
 	    backgroundColor: '#8DDBE0'
 	},
 	footer: {
-	   marginTop: -5
+	   marginTop: -5,
 	}
 });
 
