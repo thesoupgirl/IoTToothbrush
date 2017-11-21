@@ -23,7 +23,7 @@ export default class Login extends Component {
     super(props)
 
     this.state = {
-      username: '',
+      username: 'Thesoupgirl',
       password: '',
     }
   }
@@ -46,11 +46,11 @@ export default class Login extends Component {
     	</View>
         	<Container>
     			<Label text="Username or Email" />
-    			<TextInput ref={component => this._textInput = component} style={styles.textInput} onChangeText={(text) => this.setState({username:text})}/>
+    			<TextInput underlineColorAndroid='transparent' ref={component => this._textInput = component} style={styles.textInput} onChangeText={(text) => this.setState({username:text})}/>
 			</Container>
 			<Container>
     			<Label text="Password" />
-    			<TextInput ref={component => this._textInput2 = component} secureTextEntry={true} style={styles.textInput} onChangeText={(text) => this.setState({password:text})}/>
+    			<TextInput underlineColorAndroid='transparent' ref={component => this._textInput2 = component} secureTextEntry={true} style={styles.textInput} onChangeText={(text) => this.setState({password:text})}/>
 			</Container>
 			<Container>
 				<Button styles={{button: styles.transparentButton}} onPress={this.press.bind(this)}>

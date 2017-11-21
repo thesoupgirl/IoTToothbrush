@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     textLabel: {
         fontSize: 20,
         fontWeight: 'bold',
-        fontFamily: 'Verdana',
+        fontFamily: 'Barlow-Regular',
         marginBottom: 10,
         color: '#595856'
     }
