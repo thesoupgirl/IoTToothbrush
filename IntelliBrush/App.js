@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from './Login';
 import Overview from './Overview';
+import Details from './Details';
 import { Font } from 'expo';
 import { StackNavigator } from 'react-navigation';
 import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right, Spinner} from 'native-base';
@@ -33,7 +34,8 @@ export default class App extends React.Component {
 navigationOptions = { title: 'Welcome', header: null };
 export const Nav = StackNavigator({
   Login: { screen: Login, navigationOptions: { header: null }},
-  Overview: { screen: Overview, navigationOptions: { header: null }  }},
+  Overview: { screen: Overview, navigationOptions: { header: null }},
+  Details: { screen: Details, navigationOptions: { header: null } }},
   navigationOptions: { header:{ visible:false }},
   { headerMode: 'none' },
 );

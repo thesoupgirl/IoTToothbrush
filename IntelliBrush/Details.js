@@ -1,0 +1,40 @@
+import React, { Component } from 'react';
+import Label from './components/Label';
+import Container from './components/Container';
+import Button from './components/Button';
+
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  WebView
+} from 'react-native';
+
+export default class Details extends Component {
+  render() {
+  	console.log('meow');
+  	return(
+  		<View style={styles.container}>
+    		<WebView url={'http://hi.liujiaxin.info/index.html?data=points'} style= {styles.webstuff}/>
+    	</View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+  },
+  webstuff: {
+    marginTop: 20,
+    maxHeight: 200,
+    width: 320,
+    flex: 1
+  }
+});

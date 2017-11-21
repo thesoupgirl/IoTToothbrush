@@ -8,6 +8,7 @@ import {
   Text,
   View,
   TextInput,
+  TouchableOpacity,
   ScrollView
 } from 'react-native';
 
@@ -41,40 +42,44 @@ export default class Overview extends Component {
 				        	</Text>
 				        </View>
 				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 17 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		2 min 32 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		A
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 16 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 19 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		C-
-				        	</Text>
-				        </View>
-				    </View>
+				    <TouchableOpacity onPress={() => navigate('Details')}>
+					    <View style={{flex: 2, flexDirection: 'row'}}>
+					    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+					        	<Text style={ styles.tableBlackText }>
+					        		Nov 17 2017
+					        	</Text>
+					        </View>
+					        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+					        	<Text style={ styles.tableBlackText }>
+					        		2 min 32 sec
+					        	</Text>
+					        </View>
+					        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+					        	<Text style={ styles.tableBlackText }>
+					        		A
+					        	</Text>
+					        </View>
+					    </View>
+				    </TouchableOpacity>
+				    <TouchableOpacity onPress={() => navigate('Login')}>
+					    <View style={{flex: 2, flexDirection: 'row'}}>
+					    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+					        	<Text style={ styles.tableBlackText }>
+					        		Nov 16 2017
+					        	</Text>
+					        </View>
+					        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+					        	<Text style={ styles.tableBlackText }>
+					        		1 min 19 sec
+					        	</Text>
+					        </View>
+					        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+					        	<Text style={ styles.tableBlackText }>
+					        		C-
+					        	</Text>
+					        </View>
+					    </View>
+				    </TouchableOpacity>
 				    <View style={{flex: 2, flexDirection: 'row'}}>
 				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
 				        	<Text style={ styles.tableBlackText }>
@@ -250,6 +255,7 @@ export default class Overview extends Component {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
 	header: {
