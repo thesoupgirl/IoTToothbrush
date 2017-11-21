@@ -14,8 +14,7 @@ MPU6050 accel2(0x69); // <-- use for AD0 high
 
 #define OUTPUT_READABLE_QUATERNION
 
-#define RGB_CLOCK 0
-#define RGB_DATA 0
+#define RGB_DATA 5
 #define NUM_RGB 1
 #define BUTTON_PIN 0
 
@@ -39,6 +38,15 @@ uint16_t fifo2Count;     // count of all bytes currently in FIFO
 uint8_t fifo2Buffer[64]; // FIFO storage buffer
 
 Quaternion quat;
+Quaternion quat2;
+VectorInt16 acceleration;
+VectorInt16 acceleration2;
+VectorInt16 accelerationReal;
+VectorInt16 accelerationReal2;
+VectorInt16 accelerationWorld;
+VectorInt16 accelerationWorld2;
+VectorFloat gravity;
+VectorFloat gravity2;
 
 File logFile;
 uint16_t cycles;
@@ -46,6 +54,8 @@ long lastCycleTime = 0;
 
 volatile bool accelInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 volatile bool accel2Interrupt = false;
+
+void(* reset) (void) = 0;
 
 void accelDataReady() {
     accelInterrupt = true;
@@ -58,8 +68,12 @@ void accel2DataReady() {
 void setup() {
     setupLogfile();
     setupRGB();
+    rgbled[0] = CRGB::Black;
+    FastLED.show();
     setupI2C();
     startCollection();
+    rgbled[0] = CRGB::Green;
+    FastLED.show();
 }
 
 void setupLogfile()
@@ -82,7 +96,7 @@ void setupLogfile()
 
 void setupRGB()
 {
-    FastLED.addLeds<P9813, RGB_DATA, RGB_CLOCK, RGB>(rgbled, NUM_RGB);
+    FastLED.addLeds<NEOPIXEL, RGB_DATA>(rgbled, NUM_RGB);
 }
 
 void setupI2C() {
@@ -95,7 +109,7 @@ void setupI2C() {
     
     accel.initialize();
     accel2.initialize();
-    if(!accel.testConnection() || accel2.testConnection()) {
+    if(!accel.testConnection() || !accel2.testConnection()) {
       errorBlink(3);
     }
 }
@@ -137,14 +151,19 @@ void startCollection() {
 void loop() {
     if (!accelReady || !accel2Ready) return;
 
+    if(millis() > 20000) {
+      logFile.close();
+      return;
+    }
+
     while (!accelInterrupt && !accel2Interrupt && fifoCount < packetSize && fifo2Count < packet2Size) {
-      if(accelInterrupt) {
-        handleAccel();
-      }
-      
-      if(accel2Interrupt) {
-        handleAccel2();
-      }
+    }
+
+    if(accelInterrupt && accel2Interrupt) {
+      handleAccel();
+      handleAccel2();
+      printToLog(1);
+      printToLog(2);
     }
 }
 
@@ -156,7 +175,6 @@ void handleAccel() {
 
     if ((accelIntStatus & 0x10) || fifoCount == 1024) {
         accel.resetFIFO();
-        errorBlink(5);
     } else if (accelIntStatus & 0x02) {
         while (fifoCount < packetSize) fifoCount = accel.getFIFOCount();
         
@@ -165,7 +183,10 @@ void handleAccel() {
         fifoCount -= packetSize;
 
         accel.dmpGetQuaternion(&quat, fifoBuffer);
-        printToLog();
+        accel.dmpGetAccel(&acceleration, fifoBuffer);
+        accel.dmpGetGravity(&gravity, &quat);
+        accel.dmpGetLinearAccel(&accelerationReal, &acceleration, &gravity);
+        accel.dmpGetLinearAccelInWorld(&accelerationWorld, &accelerationReal, &quat);
     } 
 }
 
@@ -177,7 +198,6 @@ void handleAccel2() {
 
     if ((accel2IntStatus & 0x10) || fifo2Count == 1024) {
         accel2.resetFIFO();
-        errorBlink(6);
     } else if (accel2IntStatus & 0x02) {
         while (fifo2Count < packet2Size) fifo2Count = accel2.getFIFOCount();
         
@@ -185,25 +205,55 @@ void handleAccel2() {
         
         fifo2Count -= packet2Size;
 
-        accel2.dmpGetQuaternion(&quat, fifo2Buffer);
-        printToLog();
+        accel2.dmpGetQuaternion(&quat2, fifo2Buffer);
+        accel2.dmpGetAccel(&acceleration2, fifo2Buffer);
+        accel2.dmpGetGravity(&gravity2, &quat2);
+        accel2.dmpGetLinearAccel(&accelerationReal2, &acceleration2, &gravity2);
+        accel2.dmpGetLinearAccelInWorld(&accelerationWorld2, &accelerationReal2, &quat2);
     } 
 }
 
-void printToLog() {
-    logFile.print(quat.w);
+void printToLog(int accelNum) {
+    logFile.print(accelNum);
     logFile.print(",");
-    logFile.print(quat.x);
-    logFile.print(",");
-    logFile.print(quat.y);
-    logFile.print(",");
-    logFile.print(quat.z);
-    logFile.print(",");          
+    
+    if(accelNum == 1) {
+      logFile.print(quat.w);
+      logFile.print(",");
+      logFile.print(quat.x);
+      logFile.print(",");
+      logFile.print(quat.y);
+      logFile.print(",");
+      logFile.print(quat.z);
+      logFile.print(",");
+      logFile.print(accelerationWorld.x);
+      logFile.print(",");
+      logFile.print(accelerationWorld.y);
+      logFile.print(",");
+      logFile.print(accelerationWorld.z);
+      logFile.print(",");
+    }
+    else {
+      logFile.print(quat2.w);
+      logFile.print(",");
+      logFile.print(quat2.x);
+      logFile.print(",");
+      logFile.print(quat2.y);
+      logFile.print(",");
+      logFile.print(quat2.z);
+      logFile.print(",");
+      logFile.print(accelerationWorld2.x);
+      logFile.print(",");
+      logFile.print(accelerationWorld2.y);
+      logFile.print(",");
+      logFile.print(accelerationWorld2.z);
+      logFile.print(",");
+    }          
     logFile.println(millis()); 
 }
 
 void errorBlink(int blinks) {
-  while(1) {
+  for(int j = 0; j < 3; j++) {
     for(int i = 0; i < blinks; i++) {
       rgbled[0] = CRGB::Red;
       FastLED.show();
@@ -212,7 +262,9 @@ void errorBlink(int blinks) {
       FastLED.show();
       delay(250);
     }
-    delay(3000);
+    delay(1000);
   }
+
+  reset();
 }
 
