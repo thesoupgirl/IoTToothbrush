@@ -48,6 +48,12 @@ void InitializeSD()
 
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
+    struct stat st = {0};
+    if(stat(LOG_FILE_DIR, &st) == -1)
+    {
+    	mkdir(LOG_FILE_DIR, 0777);
+    }
+
     while(1)
     {
 		printf("\nOpening data file %d.\n", fileNum);
