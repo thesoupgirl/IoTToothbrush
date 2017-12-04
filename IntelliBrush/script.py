@@ -2,6 +2,7 @@ import pyinotify
 import os
 from firebase import firebase
 from datetime import datetime
+import re
 
 firebase = firebase.FirebaseApplication('https://intellibrush-f36bf.firebaseio.com')
 wm = pyinotify.WatchManager()
@@ -18,6 +19,9 @@ class EventHandler(pyinotify.ProcessEvent):
 		data = []
 		for line in f:
 			print(line)
+			match = re.match(r'(\d)+,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+,(\d)+,(\d)+,(\d)+\n', line)	
+			if match == None:
+				continue
 			line = line[:-1]
 			accelid, w, x, y, z, accelx, accely, accelz, ms = line.split(",")
 			print(accelid)
