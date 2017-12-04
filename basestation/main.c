@@ -9,7 +9,7 @@
 #include "ff.h"
 
 #define 	ReadBrushConnection()			bcm2835_gpio_lev(RPI_GPIO_P1_24)
-
+#define		LOG_FILE_DIR						"../LogFiles"
 
 FATFS Fatfs;		/* File system object */
 FIL Fil;			/* File object */
@@ -34,8 +34,15 @@ void InitializeSD()
     char unitval, tensval, hundredval;
     int fileNum = 0;
     char fileName[5];
+    char fullFilePath[25];
 
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
+
+    struct stat st = {0};
+    if(stat(LOG_FILE_DIR, &stat) == -1)
+    {
+    	mkdir(LOG_FILE_DIR, 0700);
+    }
 
     while(1)
     {
@@ -43,6 +50,10 @@ void InitializeSD()
 		sprintf(fileName, "%d", fileNum);
 		rc = f_open(&Fil, fileName, FA_READ);
 		if (rc) die(rc);
+
+		strcpy(fullFilePath, LOG_FILE_DIR);
+		strcat(fullFilePath, fileName);
+		FILE* fp = fopen(fullFilePath, "w+");
 
 		printf("\nType the file content.\n");
 		for (;;) {
@@ -52,14 +63,14 @@ void InitializeSD()
 				printf("%d\n", rc);
 				break;
 			}			/* Error or end of file */
-			for (u32i = 0; u32i < br; u32i++)		/* Type the data */
-				putchar(Buff[u32i]);
+			fwrite(Buff, 1, sizeof(Buff), fp);
 		}
 		if (rc) die(rc);
 
 		printf("\nClose the file.\n");
 		rc = f_close(&Fil);
 		if (rc) die(rc);
+		fclose(fp);
 		fileNum++;
     }
 
