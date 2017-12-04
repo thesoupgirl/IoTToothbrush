@@ -28,6 +28,7 @@ CRGB rgbled[NUM_RGB];
 bool blinkState = false;
 long buttonMillis = 0;
 bool buttonState = true;
+bool didReset = false;
 
 // MPU control/status vars
 bool accelReady = false;  // set true if DMP init was successful
@@ -193,7 +194,7 @@ void startCollection() {
 }
 
 void loop() {
-    if(buttonState && !digitalRead(BUTTON_PIN)) {
+    if(!didReset && buttonState && !digitalRead(BUTTON_PIN)) {
       buttonState = false;
       buttonMillis = millis(); 
     }
@@ -203,10 +204,12 @@ void loop() {
       rgbled[0] = CRGB::Black;
       FastLED.show();
       resetFunc();
+      didReset = true;
       return;
     }
 
     if(!buttonState && digitalRead(BUTTON_PIN)) {
+      didReset = false;
       buttonState = true;
     }
   
