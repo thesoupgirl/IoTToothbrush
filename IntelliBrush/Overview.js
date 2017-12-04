@@ -61,7 +61,7 @@ export default class Overview extends Component {
 					        </View>
 					    </View>
 				    </TouchableOpacity>
-				    <TouchableOpacity onPress={() => navigate('Login')}>
+				    <TouchableOpacity onPress={() => navigate('Details')}>
 					    <View style={{flex: 2, flexDirection: 'row'}}>
 					    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
 					        	<Text style={ styles.tableBlackText }>

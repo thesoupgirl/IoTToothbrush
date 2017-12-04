@@ -88,6 +88,36 @@ pressSignIn() {
 		Alert.alert('Something went wrong :/')
 	}
 
+	let ws = `https://intellibrush-f36bf.firebaseio.com/user.json`
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', ws);
+    xhr.onload = () => {
+     
+    if (xhr.status===200) {
+        //console.warn(this.state.username)
+        console.warn(xhr.responseText)
+        var userInfo = JSON.parse(xhr.responseText)
+        console.log(userInfo)
+        console.log("meow")
+        for(var i = 0; i < userInfo.length; i++) {
+        	console.log("grr")
+        	console.log(userInfo[i])
+        	console.log(userInfo[i])
+        	if(userInfo[i].name == "mashbeck") {
+        		console.log("yay");
+        	}
+        }
+       
+    } else {
+        Alert.alert(
+          'Login Failed',      
+  		)
+              
+
+  //
+    }
+    }; xhr.send()
+    this.renderBody 
 	console.log("m");
 
 }

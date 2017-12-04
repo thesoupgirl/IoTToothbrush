@@ -35,7 +35,7 @@ navigationOptions = { title: 'Welcome', header: null };
 export const Nav = StackNavigator({
   Login: { screen: Login, navigationOptions: { header: null }},
   Overview: { screen: Overview, navigationOptions: { header: null }},
-  Details: { screen: Details, navigationOptions: { header: null } }},
+  Details: { screen: Details }},
   navigationOptions: { header:{ visible:false }},
   { headerMode: 'none' },
 );

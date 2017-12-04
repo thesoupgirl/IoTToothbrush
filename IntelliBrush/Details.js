@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
 
   },
   webstuff: {
-    marginTop: 20,
-    maxHeight: 200,
+    marginTop: 50,
+    maxHeight: 500,
     width: 320,
     flex: 1
   }
