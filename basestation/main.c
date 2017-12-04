@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <bcm2835.h>
 #include "ff.h"
 
 #define 	ReadBrushConnection()			bcm2835_gpio_lev(RPI_GPIO_P1_24)
@@ -23,30 +24,6 @@ void die (		/* Stop with dying message */
 	exit(0);
 }
 
-
-/*-----------------------------------------------------------------------*/
-/* Program Main                                                          */
-/*-----------------------------------------------------------------------*/
-
-int u32flag;
-int main (void)
-{
-	//Setup input pin
-	bcm2835_gpio_fsel(RPI_GPIO_P1_24, BCM2835_GPIO_FSEL_INPT); // Connection
-
-	while(true)
-	{
-		if(ReadBrushConnection())
-		{
-			InitializeSD();
-		}
-		else
-		{
-			sleep(5);
-		}
-	}
-}
-
 void InitializeSD()
 {
 	FRESULT rc;				/* Result code */
@@ -55,24 +32,28 @@ void InitializeSD()
 	UINT bw, br, u32i, u32j;
 	UINT u32val[3]={121, 253, 199};
     char unitval, tensval, hundredval;
-    int fileNum = 1;
+    int fileNum = 0;
     char fileName[5];
 
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
-    while(true)
+    while(1)
     {
 		printf("\nOpening data file %d\n", fileNum);
-		itoa(fileNum, fileName, 10);
+		sprintf(fileName, "%d", fileNum);
 		rc = f_open(&Fil, fileName, FA_READ);
 		if (rc) die(rc);
 
 		printf("\nType the file content.\n");
 		for (;;) {
 			rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
-			if (rc || !br) break;			/* Error or end of file */
-			for (i = 0; i < br; i++)		/* Type the data */
-				putchar(Buff[i]);
+			if (rc || !br)
+			{
+				printf("%d\n", rc);
+				break;
+			}			/* Error or end of file */
+			for (u32i = 0; u32i < br; u32i++)		/* Type the data */
+				putchar(Buff[u32i]);
 		}
 		if (rc) die(rc);
 
@@ -83,10 +64,36 @@ void InitializeSD()
     }
 
 	printf("\nTest completed.\n");
-
-	return 0;
 }
 
+
+
+/*-----------------------------------------------------------------------*/
+/* Program Main                                                          */
+/*-----------------------------------------------------------------------*/
+
+int u32flag;
+int main (void)
+{
+	printf("Before setup pin\n");
+	bcm2835_init();
+	//Setup input pin
+	bcm2835_gpio_fsel(RPI_GPIO_P1_24, BCM2835_GPIO_FSEL_INPT); // Connection
+	printf("After setup pin\n");
+	while(1)
+	{
+		int pinValue = ReadBrushConnection();
+		printf("Pin Value: %d\n", pinValue);
+		if(ReadBrushConnection())
+		{
+			InitializeSD();
+		}
+		else
+		{
+			sleep(5);
+		}
+	}
+}
 
 
 /*---------------------------------------------------------*/
