@@ -45,7 +45,7 @@ void InitializeSD()
     struct stat st = {0};
     if(stat(LOG_FILE_DIR, &st) == -1)
     {
-    	mkdir(LOG_FILE_DIR, 0700);
+    	mkdir(LOG_FILE_DIR, 0777);
     }
 
     while(1)
