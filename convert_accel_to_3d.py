@@ -1,3 +1,4 @@
+# input data format: accelerometer id (starts with 1 or change line 14), w (not used), x_accel, y_accel, z_accel
 with open("./in.txt", "r") as filein:
 	with open("./out.json", "w") as fileout:
 		fileout.write("{\"points\": [")
