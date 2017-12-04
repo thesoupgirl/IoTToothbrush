@@ -4,7 +4,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "ff.h"
+
+#define 	ReadBrushConnection()			bcm2835_gpio_lev(RPI_GPIO_P1_24)
 
 
 FATFS Fatfs;		/* File system object */
@@ -28,116 +31,56 @@ void die (		/* Stop with dying message */
 int u32flag;
 int main (void)
 {
+	//Setup input pin
+	bcm2835_gpio_fsel(RPI_GPIO_P1_24, BCM2835_GPIO_FSEL_INPT); // Connection
+
+	while(true)
+	{
+		if(ReadBrushConnection())
+		{
+			InitializeSD();
+		}
+		else
+		{
+			sleep(5);
+		}
+	}
+}
+
+void InitializeSD()
+{
 	FRESULT rc;				/* Result code */
 	DIR dir;				/* Directory object */
 	FILINFO fno;			/* File information object */
 	UINT bw, br, u32i, u32j;
 	UINT u32val[3]={121, 253, 199};
-        char unitval, tensval, hundredval;
+    char unitval, tensval, hundredval;
+    int fileNum = 1;
+    char fileName[5];
 
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
-#if 0
-	printf("\nOpen an existing file (message.txt).\n");
-	rc = f_open(&Fil, "MESSAGE.TXT", FA_READ);
-	if (rc) die(rc);
-
-	printf("\nType the file content.\n");
-	for (;;) {
-		rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
-		if (rc || !br) break;			/* Error or end of file */
-		for (i = 0; i < br; i++)		/* Type the data */
-			putchar(Buff[i]);
-	}
-	if (rc) die(rc);
-
-	printf("\nClose the file.\n");
-	rc = f_close(&Fil);
-	if (rc) die(rc);
-#endif
-#if 1
-	for (u32j=0; u32j < 2; u32j++)
-	{
-        if (!u32flag)
-	{
-	u32flag = 0x01;
-	printf("\nCreate a new file (hello.txt).\n");
-	rc = f_open(&Fil, "HELLO.TXT", FA_WRITE | FA_CREATE_ALWAYS);
-	if (rc) die(rc);
-	}
-	else
-	{
-	printf("\nWrite a text data. (Hello world!)\n");
-	rc = f_write(&Fil, "Hello world!\r\n", 14, &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-
-	rc = f_write(&Fil, "Goodbye world.\r\n", 16, &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-
-	   for (u32i=0; u32i < 3; u32i++)
-	   {
-        	unitval= (((char)(u32val[u32i]%10))+0x30);
-		u32val[u32i]= u32val[u32i]/10;
-        	tensval= (((char)(u32val[u32i]%10))+0x30);
-		hundredval= (((char)(u32val[u32i]/10))+0x30);
-
-		rc = f_write(&Fil, &hundredval, sizeof(char), &bw);
+    while(true)
+    {
+		printf("\nOpening data file %d\n", fileNum);
+		itoa(fileNum, fileName, 10);
+		rc = f_open(&Fil, fileName, FA_READ);
 		if (rc) die(rc);
-		printf("%u bytes written.\n", bw);
-		rc = f_write(&Fil, &tensval, sizeof(char), &bw);
+
+		printf("\nType the file content.\n");
+		for (;;) {
+			rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
+			if (rc || !br) break;			/* Error or end of file */
+			for (i = 0; i < br; i++)		/* Type the data */
+				putchar(Buff[i]);
+		}
 		if (rc) die(rc);
-		printf("%u bytes written.\n", bw);
-		rc = f_write(&Fil, &unitval, sizeof(char), &bw);
+
+		printf("\nClose the file.\n");
+		rc = f_close(&Fil);
 		if (rc) die(rc);
-		printf("%u bytes written.\n", bw);
-
-		rc = f_write(&Fil, "\r\n", 2, &bw);
-		if (rc) die(rc);
-		printf("%u bytes written.\n", bw);
-	   }
-	}
-	}
-
-        /* 
-        val = (((char)(u32val[0]%10))+0x30);
-	rc = f_write(&Fil, &val, sizeof(UINT), &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-
-	rc = f_write(&Fil, "\r\n", 2, &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-
-        val = (((char)(u32val[1]%10))+0x30);
-	rc = f_write(&Fil, &val, sizeof(UINT), &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-
-	rc = f_write(&Fil, "\r\n", 2, &bw);
-	if (rc) die(rc);
-	printf("%u bytes written.\n", bw);
-	*/
-
-	printf("\nClose the file.\n");
-	rc = f_close(&Fil);
-	if (rc) die(rc);
-#endif
-	printf("\nOpen root directory.\n");
-	rc = f_opendir(&dir, "");
-	if (rc) die(rc);
-
-	printf("\nDirectory listing...\n");
-	for (;;) {
-		rc = f_readdir(&dir, &fno);		/* Read a directory item */
-		if (rc || !fno.fname[0]) break;	/* Error or end of dir */
-		if (fno.fattrib & AM_DIR)
-			printf("   <dir>  %s\n", fno.fname);
-		else
-			printf("%8lu  %s\n", fno.fsize, fno.fname);
-	}
-	if (rc) die(rc);
+		fileNum++;
+    }
 
 	printf("\nTest completed.\n");
 
@@ -152,7 +95,7 @@ int main (void)
 
 DWORD get_fattime (void)
 {
-	return	  ((DWORD)(2012 - 1980) << 25)	/* Year = 2012 */
+	return	  ((DWORD)(2017 - 1980) << 25)	/* Year = 2012 */
 			| ((DWORD)1 << 21)				/* Month = 1 */
 			| ((DWORD)1 << 16)				/* Day_m = 1*/
 			| ((DWORD)0 << 11)				/* Hour = 0 */
