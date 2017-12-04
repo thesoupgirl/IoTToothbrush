@@ -15,9 +15,11 @@ import {
 export default class Overview extends Component {
   render() {
   	const { navigate } = this.props.navigation;
+  	console.log("username");
+  	console.log(this.props.navigation.state.params.name);
     return (
     	    <ScrollView style={styles.scroll}>
-    	        <Label text= {"Hi, Thesoupgirl!"} style={styles.labelextend}/>
+    	        <Label text= {"Hi, " + this.props.navigation.state.params.name} style={styles.labelextend}/>
 	        	<Container>
 	    			<View style={styles.header}>
 	    				<Button label="Logout" styles={{button: styles.primaryButton, label: styles.buttonWhiteText}}  onPress={() => navigate('Login')} />

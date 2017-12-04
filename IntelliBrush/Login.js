@@ -87,7 +87,7 @@ pressSignIn() {
         	if(userInfo[i].name == this.state.username) {
         		console.log("yay");
         		foundIt = 1;
-        		navigate('Overview');
+        		navigate('Overview', {info: userInfo, name: this.state.username},);
         	}
         }
         if(!foundIt)
