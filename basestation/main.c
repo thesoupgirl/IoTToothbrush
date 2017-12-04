@@ -74,6 +74,7 @@ void InitializeSD()
 
 		printf("\nClose the file.\n");
 		rc = f_close(&Fil);
+		f_unlink(fileName);
 		if (rc) die(rc);
 		fclose(fp);
 		fileNum++;
