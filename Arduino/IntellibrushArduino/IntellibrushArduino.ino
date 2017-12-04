@@ -305,7 +305,8 @@ void printToLog(int accelNum) {
       logFile.print(accelerationWorld2.z);
       logFile.print(",");
     }          
-    logFile.println(millis()); 
+    logFile.print(millis()); 
+    logFile.print("\n");
 }
 
 void errorBlink(int blinks) {
