@@ -16,12 +16,18 @@ MPU6050 accel2(0x69); // <-- use for AD0 high
 
 #define RGB_DATA 5
 #define NUM_RGB 1
-#define BUTTON_PIN 0
+#define BUTTON_PIN 10
+#define Green Red
+#define Red Green
+#define green red
+#define red green
 
 #define NUM_CYCLES 1000
 
 CRGB rgbled[NUM_RGB];
 bool blinkState = false;
+long buttonMillis = 0;
+bool buttonState = true;
 
 // MPU control/status vars
 bool accelReady = false;  // set true if DMP init was successful
@@ -66,14 +72,38 @@ void accel2DataReady() {
 }
 
 void setup() {
+    setupButton();
     setupLogfile();
     setupRGB();
     rgbled[0] = CRGB::Black;
     FastLED.show();
     setupI2C();
     startCollection();
+    rgbled[0] = CRGB::Red;
+    FastLED.show();
+    while(digitalRead(BUTTON_PIN)) {
+      //Wait for user to start collection
+    }
     rgbled[0] = CRGB::Green;
     FastLED.show();
+}
+
+void resetFunc() {
+    resetLogFile();
+    rgbled[0] = CRGB::Black;
+    FastLED.show();
+    rgbled[0] = CRGB::Red;
+    FastLED.show();
+    while(digitalRead(BUTTON_PIN)) {
+      //Wait for user to start collection
+    }
+    rgbled[0] = CRGB::Green;
+    FastLED.show();
+}
+
+void setupButton() {
+    pinMode(BUTTON_PIN, INPUT);
+    digitalWrite(BUTTON_PIN, HIGH);
 }
 
 void setupLogfile()
@@ -82,6 +112,20 @@ void setupLogfile()
       errorBlink(1);
     }
 
+    int fileNum = 0;
+    while(SD.exists(String(fileNum))) {
+      fileNum++;
+    }
+    
+    logFile = SD.open(String(fileNum), FILE_WRITE);
+  
+    if (!logFile) {
+      errorBlink(2);
+    }
+}
+
+void resetLogFile()
+{
     int fileNum = 0;
     while(SD.exists(String(fileNum))) {
       fileNum++;
@@ -149,12 +193,24 @@ void startCollection() {
 }
 
 void loop() {
-    if (!accelReady || !accel2Ready) return;
-
-    if(millis() > 20000) {
+    if(buttonState && !digitalRead(BUTTON_PIN)) {
+      buttonState = false;
+      buttonMillis = millis(); 
+    }
+    
+    if(!buttonState && !digitalRead(BUTTON_PIN) && millis() - buttonMillis >= 1000) {
       logFile.close();
+      rgbled[0] = CRGB::Black;
+      FastLED.show();
+      resetFunc();
       return;
     }
+
+    if(!buttonState && digitalRead(BUTTON_PIN)) {
+      buttonState = true;
+    }
+  
+    if (!accelReady || !accel2Ready) return;
 
     while (!accelInterrupt && !accel2Interrupt && fifoCount < packetSize && fifo2Count < packet2Size) {
     }
