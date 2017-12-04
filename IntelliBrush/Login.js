@@ -73,7 +73,37 @@ pressSignIn() {
 	const { navigate } = this.props.navigation;
 	console.log(this.state.username);
 	if(this.state.username != '' && this.state.password != '') {
-		navigate('Overview');
+		let ws = `https://intellibrush-f36bf.firebaseio.com/user.json`
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', ws);
+    xhr.onload = () => {
+     
+    if (xhr.status===200) {
+        //console.warn(this.state.username)
+        console.warn(xhr.responseText)
+        var foundIt = 0;
+        var userInfo = JSON.parse(xhr.responseText)
+        for(var i = 0; i < userInfo.length; i++) {
+        	if(userInfo[i].name == this.state.username) {
+        		console.log("yay");
+        		foundIt = 1;
+        		navigate('Overview');
+        	}
+        }
+        if(!foundIt)
+        	Alert.alert('Login failed')
+       
+    } else {
+        Alert.alert(
+          'Login Failed',      
+  		)
+              
+
+  //
+    }
+    }; xhr.send()
+    this.renderBody 
+	console.log("m");
 	}
 	else if(this.state.username == '' && this.state.password == '') {
 		Alert.alert('No username or password...thats awks')
@@ -87,38 +117,6 @@ pressSignIn() {
 	else {
 		Alert.alert('Something went wrong :/')
 	}
-
-	let ws = `https://intellibrush-f36bf.firebaseio.com/user.json`
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', ws);
-    xhr.onload = () => {
-     
-    if (xhr.status===200) {
-        //console.warn(this.state.username)
-        console.warn(xhr.responseText)
-        var userInfo = JSON.parse(xhr.responseText)
-        console.log(userInfo)
-        console.log("meow")
-        for(var i = 0; i < userInfo.length; i++) {
-        	console.log("grr")
-        	console.log(userInfo[i])
-        	console.log(userInfo[i])
-        	if(userInfo[i].name == "mashbeck") {
-        		console.log("yay");
-        	}
-        }
-       
-    } else {
-        Alert.alert(
-          'Login Failed',      
-  		)
-              
-
-  //
-    }
-    }; xhr.send()
-    this.renderBody 
-	console.log("m");
 
 }
 
