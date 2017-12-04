@@ -28,6 +28,12 @@ void die (		/* Stop with dying message */
 	exit(0);
 }
 
+void UnInitializeSD()
+{
+	f_mount(0, NULL);
+	return;
+}
+
 void InitializeSD()
 {
 	FRESULT rc;				/* Result code */
@@ -42,45 +48,58 @@ void InitializeSD()
 
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
-    struct stat st = {0};
-    if(stat(LOG_FILE_DIR, &st) == -1)
-    {
-    	mkdir(LOG_FILE_DIR, 0700);
-    }
-
     while(1)
     {
-		printf("\nOpening data file %d\n", fileNum);
+		printf("\nOpening data file %d.\n", fileNum);
 		sprintf(fileName, "%d", fileNum);
 		rc = f_open(&Fil, fileName, FA_READ);
-		if (rc) die(rc);
+		if (rc)
+		{
+			printf("\nAll files copied.\n");
+			UnInitializeSD();
+			return;
+		}
 
 		strcpy(fullFilePath, LOG_FILE_DIR);
 		strcat(fullFilePath, "/");
 		strcat(fullFilePath, fileName);
 		FILE* fp = fopen(fullFilePath, "w+");
 
-		printf("\nType the file content.\n");
+		printf("Reading data from file...\n");
 		for (;;) {
 			rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
 			if (rc || !br)
 			{
-				printf("%d\n", rc);
 				break;
 			}			/* Error or end of file */
 			fwrite(Buff, 1, sizeof(Buff), fp);
 		}
-		if (rc) die(rc);
+		if (rc)
+		{
+			UnInitializeSD();
+			return;
+		}
 
-		printf("\nClose the file.\n");
+		printf("Closing file.\n");
 		rc = f_close(&Fil);
-		f_unlink(fileName);
-		if (rc) die(rc);
+		if (rc)
+		{
+			UnInitializeSD();
+			return;
+		}
+		rc = f_unlink(fileName);
+		if (rc)
+		{
+			UnInitializeSD();
+			return;
+		}
+
 		fclose(fp);
 		fileNum++;
     }
 
-	printf("\nTest completed.\n");
+	printf("\nAll files copied.\n");
+	return;
 }
 
 
@@ -92,11 +111,16 @@ void InitializeSD()
 int u32flag;
 int main (void)
 {
-	printf("Before setup pin\n");
 	bcm2835_init();
 	//Setup input pin
 	bcm2835_gpio_fsel(RPI_GPIO_P1_24, BCM2835_GPIO_FSEL_INPT); // Connection
-	printf("After setup pin\n");
+
+	struct stat st = {0};
+    if(stat(LOG_FILE_DIR, &st) == -1)
+    {
+    	mkdir(LOG_FILE_DIR, 0700);
+    }
+
 	while(1)
 	{
 		int pinValue = ReadBrushConnection();
