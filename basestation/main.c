@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <bcm2835.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+
 #include "ff.h"
 
 #define 	ReadBrushConnection()			bcm2835_gpio_lev(RPI_GPIO_P1_24)
@@ -39,7 +43,7 @@ void InitializeSD()
 	f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
     struct stat st = {0};
-    if(stat(LOG_FILE_DIR, &stat) == -1)
+    if(stat(LOG_FILE_DIR, &st) == -1)
     {
     	mkdir(LOG_FILE_DIR, 0700);
     }
@@ -52,6 +56,7 @@ void InitializeSD()
 		if (rc) die(rc);
 
 		strcpy(fullFilePath, LOG_FILE_DIR);
+		strcat(fullFilePath, "/");
 		strcat(fullFilePath, fileName);
 		FILE* fp = fopen(fullFilePath, "w+");
 
