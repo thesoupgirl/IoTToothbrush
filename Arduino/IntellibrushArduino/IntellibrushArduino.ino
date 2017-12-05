@@ -199,18 +199,20 @@ void loop() {
       buttonMillis = millis(); 
     }
     
-    if(!buttonState && !digitalRead(BUTTON_PIN) && millis() - buttonMillis >= 1000) {
+    if(!buttonState && millis() - buttonMillis >= 1000) {
       logFile.close();
       rgbled[0] = CRGB::Black;
       FastLED.show();
-      resetFunc();
-      didReset = true;
+      while(1){}
       return;
     }
 
     if(!buttonState && digitalRead(BUTTON_PIN)) {
-      didReset = false;
       buttonState = true;
+    }
+
+    if(digitalRead(BUTTON_PIN)) {
+      didReset = false;
     }
   
     if (!accelReady || !accel2Ready) return;
