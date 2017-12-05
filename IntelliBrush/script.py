@@ -19,7 +19,7 @@ class EventHandler(pyinotify.ProcessEvent):
 		data = []
 		for line in f:
 			print(line)
-			match = re.match(r'(\d)+,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+(.(\d)+)?,(\d)+,(\d)+,(\d)+,(\d)+\n', line)	
+			match = re.match(r'(\d)+,(-)?(\d)+(.(\d)+)?,(-)?(\d)+(.(\d)+)?,(-)?(\d)+(.(\d)+)?,(-)?(\d)+(.(\d)+)?,(-)?(\d)+,(-)?(\d)+,(-)?(\d)+,(-)?(\d)+\n', line)	
 			if match == None:
 				continue
 			line = line[:-1]
