@@ -46,7 +46,11 @@ class EventHandler(pyinotify.ProcessEvent):
 			data.append(point);
 		f.close()
 		json['data'] = data;
-		result = firebase.post('/user/0/session/', json);
+		result = firebase.get('/user/0/', 'session')
+		if result == None:
+			result = []
+		result.append(json)	
+		result = firebase.put('/user/0/', 'session', result);
 		os.remove(event.pathname)
 
 
