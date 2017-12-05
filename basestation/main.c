@@ -13,7 +13,7 @@
 #include "ff.h"
 
 #define 	ReadBrushConnection()			bcm2835_gpio_lev(RPI_GPIO_P1_24)
-#define		LOG_FILE_DIR						"../LogFiles"
+#define		LOG_FILE_DIR						"/home/pi/IoTToothbrush/LogFiles"
 
 FATFS Fatfs;		/* File system object */
 FIL Fil;			/* File object */
@@ -56,7 +56,7 @@ void InitializeSD()
 
     while(1)
     {
-		printf("\nOpening data file %d.\n", fileNum);
+		printf("\nScanning for uncopied files...\n");
 		sprintf(fileName, "%d", fileNum);
 		rc = f_open(&Fil, fileName, FA_READ);
 		if (rc)
@@ -65,7 +65,8 @@ void InitializeSD()
 			UnInitializeSD();
 			return;
 		}
-
+		
+		printf("\nOpened data file %d.\n", fileNum);
 		strcpy(fullFilePath, LOG_FILE_DIR);
 		strcat(fullFilePath, "/");
 		strcat(fullFilePath, fileName);
@@ -117,6 +118,7 @@ void InitializeSD()
 int u32flag;
 int main (void)
 {
+	printf("Initializing...\n");
 	bcm2835_init();
 	//Setup input pin
 	bcm2835_gpio_fsel(RPI_GPIO_P1_24, BCM2835_GPIO_FSEL_INPT); // Connection
@@ -127,16 +129,19 @@ int main (void)
     	mkdir(LOG_FILE_DIR, 0777);
     }
 
+	int didARead = 0;
 	while(1)
 	{
 		int pinValue = ReadBrushConnection();
 		printf("Pin Value: %d\n", pinValue);
-		if(ReadBrushConnection())
+		if(!didARead && ReadBrushConnection())
 		{
+			didARead = 1;
 			InitializeSD();
 		}
 		else
 		{
+			didARead = 0;
 			sleep(5);
 		}
 	}
