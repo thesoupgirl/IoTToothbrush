@@ -69,9 +69,9 @@ export default class Login extends Component {
   }
 
 pressSignIn() {
-	console.log("killme");
+	//console.log("killme");
 	const { navigate } = this.props.navigation;
-	console.log(this.state.username);
+	//console.log(this.state.username);
 	if(this.state.username != '' && this.state.password != '') {
 		let ws = `https://intellibrush-f36bf.firebaseio.com/user.json`
     let xhr = new XMLHttpRequest();
@@ -80,14 +80,14 @@ pressSignIn() {
      
     if (xhr.status===200) {
         //console.warn(this.state.username)
-        console.warn(xhr.responseText)
+        //console.warn(xhr.responseText)
         var foundIt = 0;
         var userInfo = JSON.parse(xhr.responseText)
         for(var i = 0; i < userInfo.length; i++) {
         	if(userInfo[i].name == this.state.username) {
-        		console.log("yay");
+        		//console.log("yay");
         		foundIt = 1;
-        		navigate('Overview', {info: userInfo, name: this.state.username},);
+        		navigate('Overview', {info: userInfo[i].session, name: this.state.username},);
         	}
         }
         if(!foundIt)

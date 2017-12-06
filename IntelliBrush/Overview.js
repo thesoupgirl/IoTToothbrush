@@ -4,6 +4,7 @@ import Container from './components/Container';
 import Button from './components/Button';
 
 import {
+  ListView,
   StyleSheet,
   Text,
   View,
@@ -13,10 +14,15 @@ import {
 } from 'react-native';
 
 export default class Overview extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
   	const { navigate } = this.props.navigation;
   	console.log("username");
-  	console.log(this.props.navigation.state.params.name);
+  	//console.log(this.props.navigation.state.params.info.session);
+  	console.log(this.props.navigation.state.params.info[0].grade);
     return (
     	    <ScrollView style={styles.scroll}>
     	        <Label text= {"Hi, " + this.props.navigation.state.params.name} style={styles.labelextend}/>
@@ -44,214 +50,32 @@ export default class Overview extends Component {
 				        	</Text>
 				        </View>
 				    </View>
-				    <TouchableOpacity onPress={() => navigate('Details')}>
-					    <View style={{flex: 2, flexDirection: 'row'}}>
-					    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-					        	<Text style={ styles.tableBlackText }>
-					        		Nov 17 2017
-					        	</Text>
-					        </View>
-					        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-					        	<Text style={ styles.tableBlackText }>
-					        		2 min 32 sec
-					        	</Text>
-					        </View>
-					        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-					        	<Text style={ styles.tableBlackText }>
-					        		A
-					        	</Text>
-					        </View>
-					    </View>
-				    </TouchableOpacity>
-				    <TouchableOpacity onPress={() => navigate('Details')}>
-					    <View style={{flex: 2, flexDirection: 'row'}}>
-					    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-					        	<Text style={ styles.tableBlackText }>
-					        		Nov 16 2017
-					        	</Text>
-					        </View>
-					        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-					        	<Text style={ styles.tableBlackText }>
-					        		1 min 19 sec
-					        	</Text>
-					        </View>
-					        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-					        	<Text style={ styles.tableBlackText }>
-					        		C-
-					        	</Text>
-					        </View>
-					    </View>
-				    </TouchableOpacity>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 15 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		0 min 32 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		F
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 14 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 02 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		D+
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 13 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		2 min 02 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		A
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 12 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 09 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		D+
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 11 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 07 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		D+
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 10 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 14 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		D+
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 09 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		2 min 02 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		A
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 08 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 12 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		D+
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 08 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		2 min 02 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		B
-				        	</Text>
-				        </View>
-				    </View>
-				    <View style={{flex: 2, flexDirection: 'row'}}>
-				    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		Nov 02 2017
-				        	</Text>
-				        </View>
-				        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
-				        	<Text style={ styles.tableBlackText }>
-				        		1 min 34 sec
-				        	</Text>
-				        </View>
-				        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
-				        	<Text style={ styles.tableBlackText }>
-				        		B-
-				        	</Text>
-				        </View>
-				    </View>
+
+				    {this.props.navigation.state.params.info.map((prop, key) => {
+				         console.warn(prop.grade);
+				         return (
+				            <TouchableOpacity onPress={() => navigate('Details')}>
+							    <View style={{flex: 2, flexDirection: 'row'}}>
+							    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+							        	<Text style={ styles.tableBlackText }>
+							        		{prop.timestamp}
+							        	</Text>
+							        </View>
+							        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+							        	<Text style={ styles.tableBlackText }>
+							        		{prop.duration}
+							        	</Text>
+							        </View>
+							        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+							        	<Text style={ styles.tableBlackText }>
+							        		{prop.grade}
+							        	</Text>
+							        </View>
+							    </View>
+				    		</TouchableOpacity>
+				         );
+				      })}
+				    
 			    </Container>
 			</ScrollView>
     );
@@ -290,6 +114,9 @@ const styles = StyleSheet.create({
     	marginTop: 45,
 	    color: '#0d8898',
 	    fontSize: 15
+    },
+    list: {
+
     },
     labelextend: {
 	    marginTop: 55
