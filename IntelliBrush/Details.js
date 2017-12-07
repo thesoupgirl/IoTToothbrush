@@ -18,7 +18,7 @@ export default class Details extends Component {
   	console.log('meow');
   	return(
   		<View style={styles.container}>
-    		<WebView url={'http://hi.liujiaxin.info/index.html?data=points'} style= {styles.webstuff}/>
+    		<WebView url={this.props.navigation.state.params.link} style= {styles.webstuff}/>
     	</View>
     );
   }

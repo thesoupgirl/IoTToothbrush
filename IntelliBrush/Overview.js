@@ -16,11 +16,16 @@ import {
 export default class Overview extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      i: 0,
+    }
   }
 
   render() {
   	const { navigate } = this.props.navigation;
   	console.log("username");
+  	console.log(this.state.i);
+  	console.log('meow');
   	//console.log(this.props.navigation.state.params.info.session);
   	console.log(this.props.navigation.state.params.info[0].grade);
     return (
@@ -53,8 +58,12 @@ export default class Overview extends Component {
 
 				    {this.props.navigation.state.params.info.map((prop, key) => {
 				         console.warn(prop.grade);
+				         var linko = "http://hi.liujiaxin.info/index.html?data=user/0/session/" + this.state.i + "/position";
+				         console.log(linko);
+				         this.state.i++;
+				         //var http://hi.liujiaxin.info/index.html?data=user/<user id (just 0?)>/session/<session id>/position
 				         return (
-				            <TouchableOpacity onPress={() => navigate('Details')}>
+				            <TouchableOpacity onPress={() => navigate('Details', {link: linko})}>
 							    <View style={{flex: 2, flexDirection: 'row'}}>
 							    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
 							        	<Text style={ styles.tableBlackText }>
