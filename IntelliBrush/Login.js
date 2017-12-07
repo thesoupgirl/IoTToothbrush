@@ -3,9 +3,13 @@ import Container from './components/Container';
 import Button from './components/Button';
 import Label from './components/Label';
 import Overview from './Overview';
- 
+import { StackNavigator } from 'react-navigation';
+var md5 = require('md5');
+
 import {
+  Alert,
   StyleSheet,
+  Image,
   Text,
   View,
   TextInput,
@@ -19,7 +23,7 @@ export default class Login extends Component {
     super(props)
 
     this.state = {
-      username: '',
+      username: 'Thesoupgirl',
       password: '',
     }
   }
@@ -37,13 +41,16 @@ export default class Login extends Component {
   	const { navigate } = this.props.navigation;
     return (
         <ScrollView style={styles.scroll}>
+        <View>
+    		<Image style={styles.stretch, styles.imagePlace} source={require('./16ec5560-c56e-48ee-831b-2e8fe4080a75.png')} />
+    	</View>
         	<Container>
     			<Label text="Username or Email" />
-    			<TextInput ref={component => this._textInput = component} style={styles.textInput} onChangeText={(text) => this.setState({username:text})}/>
+    			<TextInput underlineColorAndroid='transparent' ref={component => this._textInput = component} style={styles.textInput} onChangeText={(text) => this.setState({username:text})}/>
 			</Container>
 			<Container>
     			<Label text="Password" />
-    			<TextInput ref={component => this._textInput2 = component} secureTextEntry={true} style={styles.textInput} onChangeText={(text) => this.setState({password:text})}/>
+    			<TextInput underlineColorAndroid='transparent' ref={component => this._textInput2 = component} secureTextEntry={true} style={styles.textInput} onChangeText={(text) => this.setState({password:text})}/>
 			</Container>
 			<Container>
 				<Button styles={{button: styles.transparentButton}} onPress={this.press.bind(this)}>
@@ -51,7 +58,7 @@ export default class Login extends Component {
     		</Container>
     		<View style={styles.footer}>
 	    		<Container>
-	        		<Button label="Sign In" styles={{button: styles.primaryButton, label: styles.buttonWhiteText}}  onPress={() => navigate('Overview')} />
+	        		<Button label="Sign In" styles={{button: styles.primaryButton, label: styles.buttonWhiteText}}  onPress={this.pressSignIn.bind(this)} />
 	    		</Container>
     			<Container>
 			        <Button label="CANCEL" styles={{label: styles.buttonBlackText}} onPress={this.clearText} />
@@ -62,15 +69,57 @@ export default class Login extends Component {
   }
 
 pressSignIn() {
-	//const { navigate } = this.props.navigation;
-	//navigate('Overview');
+	//console.log("killme");
+	const { navigate } = this.props.navigation;
+	//console.log(this.state.username);
+	if(this.state.username != '' && this.state.password != '') {
+		let ws = `https://intellibrush-f36bf.firebaseio.com/user.json`
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', ws);
+    xhr.onload = () => {
+     
+    if (xhr.status===200) {
+        //console.warn(this.state.username)
+        //console.warn(xhr.responseText)
+        var foundIt = 0;
+        var userInfo = JSON.parse(xhr.responseText)
+        for(var i = 0; i < userInfo.length; i++) {
+        	if(userInfo[i].name == this.state.username) {
+        		//console.log("yay");
+        		foundIt = 1;
+        		navigate('Overview', {info: userInfo[i].session, name: this.state.username},);
+        	}
+        }
+        if(!foundIt)
+        	Alert.alert('Login failed')
+       
+    } else {
+        Alert.alert(
+          'Login Failed',      
+  		)
+              
+
+  //
+    }
+    }; xhr.send()
+    this.renderBody 
 	console.log("m");
+	}
+	else if(this.state.username == '' && this.state.password == '') {
+		Alert.alert('No username or password...thats awks')
+	}
+	else if(this.state.password == '') {
+		Alert.alert('No password...thats awks')
+	}
+	else if(this.state.username == '') {
+		Alert.alert('No username...thats awks')
+	}
+	else {
+		Alert.alert('Something went wrong :/')
+	}
 
 }
-pressCancel() {
-  console.log("r");
-  this.state.username = "";
-}
+
 press() {
 
 }
@@ -78,7 +127,7 @@ press() {
 
 const styles = StyleSheet.create({
  	scroll: {
- 		paddingTop: 30,
+ 		paddingTop: -80,
 	    backgroundColor: '#FFFFFF',
 	    padding: 30,
 	    flexDirection: 'column'
@@ -100,6 +149,10 @@ const styles = StyleSheet.create({
 	    fontSize: 20,
 	    color: '#FFF',
 	},
+	imagePlace: {
+    	alignSelf: 'center',
+		marginTop: -30
+	},
 	buttonBlackText: {
 	    fontSize: 20,
 	    color: '#595856'
@@ -108,7 +161,7 @@ const styles = StyleSheet.create({
 	    backgroundColor: '#8DDBE0'
 	},
 	footer: {
-	   marginTop: 60
+	   marginTop: -5,
 	}
 });
 
