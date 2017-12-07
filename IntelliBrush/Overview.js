@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Label from './components/Label';
 import Container from './components/Container';
 import Button from './components/Button';
+import moment from 'moment';
 
 import {
   ListView,
@@ -58,6 +59,9 @@ export default class Overview extends Component {
 
 				    {this.props.navigation.state.params.info.map((prop, key) => {
 				         console.warn(prop.grade);
+				         var time = moment(prop.timestamp);
+				         console.warn("arf");
+				         console.log("killme" + time);
 				         var linko = "http://hi.liujiaxin.info/index.html?data=user/0/session/" + this.state.i + "/position";
 				         console.log(linko);
 				         this.state.i++;
@@ -65,17 +69,17 @@ export default class Overview extends Component {
 				         return (
 				            <TouchableOpacity onPress={() => navigate('Details', {link: linko})}>
 							    <View style={{flex: 2, flexDirection: 'row'}}>
-							    	<View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+							    	<View style={{width: 100, height: 40, backgroundColor: 'azure'}} >
 							        	<Text style={ styles.tableBlackText }>
-							        		{prop.timestamp}
+							        		{moment(prop.timestamp).format("YYYY-MM-DD HH:mm")}
 							        	</Text>
 							        </View>
-							        <View style={{width: 100, height: 30, backgroundColor: 'azure'}} >
+							        <View style={{width: 100, height: 40, backgroundColor: 'azure'}} >
 							        	<Text style={ styles.tableBlackText }>
 							        		{prop.duration}
 							        	</Text>
 							        </View>
-							        <View style={{width: 60, height: 30, backgroundColor: 'azure'}}>
+							        <View style={{width: 60, height: 40, backgroundColor: 'azure'}}>
 							        	<Text style={ styles.tableBlackText }>
 							        		{prop.grade}
 							        	</Text>
